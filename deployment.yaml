@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tomcat-mysql
+  labels:
+    app: tomcat
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tomcat
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:5.5.49
+        name: mysql
+        env:
+          # $ kubectl create secret generic mysql-pass --from-file=password.txt
+          # make sure password.txt does not have a trailing newline
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password.txt
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-etc-storage
+          mountPath: /etc/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+      - name: mysql-etc-storage
+        hostPath:
+          path: /data1/etc/mysql

@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: nginx
+    tier: frontend
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: frontend
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        command: 
+          - /bin/bash
+          - -c
+          - "envsubst < /etc/nginx/templates/mysite.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+        env:
+        - name: PROXY_PASS_TO
+          value: tomcat
+        ports:
+        - containerPort: 80
+          name: nginx
+        volumeMounts:
+        - name: nginx-persistent-storage
+          mountPath: /var/www/html
+        - name: nginx-etc-storage
+          mountPath: /etc/nginx/templates
+          readOnly: true
+      volumes:
+      - name: nginx-persistent-storage
+        hostPath:
+          path: /data1/etc/html
+      - name: nginx-etc-storage
+        hostPath:
+          path: /data1/etc/nginx

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-mysql
+  labels:
+    app: tomcat
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: tomcat
+    tier: mysql
+  clusterIP: None
