@@ -67,3 +67,5 @@ spec:
       - name: mysql-etc-storage
         hostPath:
           path: /data1/etc/mysql
+      nodeSelector:
+        hostname: test-204
