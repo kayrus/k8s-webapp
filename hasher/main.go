@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"hash/fnv"
 	"os"
+	"strings"
 )
 
 func getHash(text string) string {
@@ -16,12 +17,20 @@ func getHash(text string) string {
 func main() {
 	ip := flag.String("ip", "", "ip address")
 	host := flag.String("host", "", "host address")
+	domain := flag.String("domain", "default.svc.skydns.local", "domain name")
+	prefix := flag.String("prefix", "/skydns", "SkyDNS etcd path prefix")
 	flag.Parse()
 	if *ip == "" || *host == "" {
 		fmt.Fprint(os.Stderr, "--ip and/or --host flags are not provided\n")
 		os.Exit(1)
 	}
-	fmt.Printf(`etcdctl set /skydns/local/cluster/svc/default/%s/%s '{"host":"%s","priority":10,"weight":10,"ttl":30,"targetstrip":0}'%s`,
+	var domainReversed []string
+	for _, dom := range strings.Split(*domain, ".") {
+		domainReversed = append([]string{dom}, domainReversed...)
+	}
+	fmt.Printf(`etcdctl set %s/%s/%s/%s '{"host":"%s","priority":10,"weight":10,"ttl":30,"targetstrip":0}'%s`,
+		*prefix,
+		strings.Join(domainReversed, "/"),
 		*host,
 		getHash(
 			fmt.Sprintf(`{"host":"%s","priority":10,"weight":10,"ttl":30,"targetstrip":0}`, *ip)),
