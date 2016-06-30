@@ -1,3 +1,18 @@
+## Quick walkthrough
+
+* `kubectl create -f local-volumes.yaml`
+* `kubectl create secret generic mysql-pass --from-file=password.txt`
+* Set proper hostname in nodeSelector inside `mysql-deployment.yaml`
+* `kubectl create -f mysql-deployment.yaml`
+* Use `kubectl get events` to resolve infinite `Pending` issues
+* `kubectl create -f tomcat-deployment.yaml`
+* `kubectl create -f nginx-deployment.yaml`
+* Run `sudo mkdir -p /data1/etc/nginx` on worker k8s node which runs nginx pod
+* Copy nginx template: `sudo cp mysite.template /data1/etc/nginx`
+* `kubectl create -f ingress_rc.yaml`
+* `kubectl create -f exposed_80_port.yaml`
+* Visit [http://k8s-node-1/](http://k8s-node-1/) URL
+
 ```sh
 kubectl run -i --tty ubuntu --image=ubuntu --restart=Never
 # kubectl exec -ti $(kubectl get pods | grep ubuntu | cut -d" " -f1) bash

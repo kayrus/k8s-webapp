@@ -1,13 +1,13 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: hackathon.vm.pl
+  name: k8s-node-1
 spec:
   rules:
-  - host: hackathon.vm.pl
+  - host: k8s-node-1
     http:
       paths:
       - path: /
         backend:
-          serviceName: apache
+          serviceName: nginx
           servicePort: 80

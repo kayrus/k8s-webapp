@@ -5,10 +5,6 @@ server {
   root /var/www/html;
 
   location / { 
-    try_files $uri $uri/ @proxy; 
-  }
-
-  location @proxy { 
     proxy_pass http://${PROXY_PASS_TO}:8080; 
   }
 }

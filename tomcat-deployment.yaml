@@ -10,7 +10,6 @@ spec:
   selector:
     app: tomcat
     tier: frontend
-  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

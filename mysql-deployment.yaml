@@ -68,4 +68,4 @@ spec:
         hostPath:
           path: /data1/etc/mysql
       nodeSelector:
-        hostname: test-204
+        kubernetes.io/hostname: k8s-node-1
