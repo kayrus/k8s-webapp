@@ -51,6 +51,8 @@ spec:
             secretKeyRef:
               name: mysql-pass
               key: password.txt
+        - name: MYSQL_DATABASE
+          value: gowebapp
         ports:
         - containerPort: 3306
           name: mysql
