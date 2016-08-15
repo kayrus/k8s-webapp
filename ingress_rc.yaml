@@ -107,3 +107,5 @@ spec:
             items:
             - key: nginx.tmpl
               path: nginx.tmpl
+      nodeSelector:
+        kubernetes.io/hostname: k8s-node-1
